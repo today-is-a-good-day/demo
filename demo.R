@@ -2,8 +2,10 @@ library(maptools)
 library(ggmap)
 
 # an example of how to plot a region with ggmap
-# donwload the shapefile here: 
-# then read it in
+# geography defines regions using polygons (lots of them). In my understanding, 
+# the points of these polygons are used to draw the boundaries of countries, municipalities,
+# cities etc. 
+# read in data
 ct <- readShapePoly("metropolitan municipality cpt.shp")
 # make df with fortify function
 ct.points <- fortify(ct)
