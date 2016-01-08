@@ -1,0 +1,16 @@
+{
+    "contents" : "library(maptools)\nlibrary(ggmap)\n\n# an example of how to plot a region with ggmap\n# donwload the shapefile here: \n# then read it in\nct <- readShapePoly(\"metropolitan municipality cpt.shp\")\n# make df with fortify function\nct.points <- fortify(ct)\n\n# set colours for basemap\nlibrary(RColorBrewer)\ncolors <- brewer.pal(9, \"BuGn\")\n\n# make basemap\nbbox2 <- ggmap::make_bbox(lon = ct.points$long, lat = ct.points$lat, f = 0.5)\nmapImage2 <- get_map(location = bbox2,\n                     color = \"color\",\n                     source = \"google\",\n                     maptype = \"roadmap\",\n                     zoom = 9)\n# plot the boundaries of the municipality of cape town on the basemap\nggmap(mapImage2) +\n    geom_polygon(data = ct.points, \n                 aes(x = long, y = lat, group = group), \n                 color = colors[9],\n                 fill = colors[6],\n                 alpha = 0.5) +\n    labs(x = \"Longitude\",\n         y = \"Latitude\")\n\n# for a quick look up without fancy map underneath\nplot(ct, border = \"blue\", axes = TRUE, las = 1)\n\n# check if lon-lat data lies within ct borders\n# toy data set\ndf <- data.frame(city = c(\"Paris\", \"London\", \"Barcelona\", \"Cape Town\"),\n                 long = c(2.294694, -0.116773, 2.154007, 18.480131), \n                 lat = c(48.858093, 51.510357, 41.390205, -33.984347))\n# first transform df coordinates in Spatial Points\ndf_pts <- subset(df, select = c(long, lat))\n# second convert long lat data of df into spatial object with same projection as area object\ndf_pts_sp <- SpatialPoints(df_pts)\n# third check which points of df lie in area and return a dataframe\npts_in <- data.frame(over(ct, df_pts_sp, returnList = TRUE))\n# select only rows of df stated in pts_in (lying in area)\ndf_area <- df[pts_in$X0,]\n\n# as you can see, df_area contains only one city, namely Cape Town, which is lying \n# within the Western Cape. \n\n",
+    "created" : 1452243177736.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "806494963",
+    "id" : "604EE70B",
+    "lastKnownWriteTime" : 1452243308,
+    "path" : "~/Desktop/demo/demo.R",
+    "project_path" : "demo.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
